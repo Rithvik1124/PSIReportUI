@@ -14,8 +14,9 @@ function App() {
   const handleSubmit = async () => {
     setError("");
     setDocxBlob(null);
+
     if (!url.startsWith("http")) {
-      setError("Please enter a valid URL (must start with http)");
+      setError("Please enter a valid URL (must start with http or https)");
       return;
     }
 
@@ -23,25 +24,28 @@ function App() {
 
     try {
       const res = await fetch(API_URL, {
-  method: "POST",
-  headers: { "Content-Type": "application/json" },
-  body: JSON.stringify({ url }),
-});
-
-
-
-      if (!res.ok) throw new Error("Server Error");
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ url })
+      });
 
       const data = await res.json();
 
-      const docContent = `
-        ${data.advice || "No advice returned."}
-      `;
-      const blob = await res.blob();
-      setDocxBlob(blob);
+      if (!res.ok || !data.advice) {
+        throw new Error(data?.error || "No advice received.");
+      }
 
-      
+      // Create docx-like text blob from advice
+      const blob = new Blob(
+        [data.advice],
+        {
+          type: "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+        }
+      );
+
+      setDocxBlob(blob);
     } catch (err) {
+      console.error("❌ Fetch error:", err);
       setError("Something went wrong. Try again.");
     }
 
