@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 
-const API_URL = "https://YOUR_BACKEND_DOMAIN/analyze";
-const PASSWORD = "secure123"; // 🔐 Set your frontend password
+const API_URL = "https://psireport-production-093f.up.railway.app/analyze";
+const PASSWORD = "$ecure"; // 🔐 Set your frontend password
 
 function App() {
   const [auth, setAuth] = useState(false);
