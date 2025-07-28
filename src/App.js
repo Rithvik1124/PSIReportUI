@@ -23,10 +23,12 @@ function App() {
 
     try {
       const res = await fetch(API_URL, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ url })
-      });
+  method: "POST",
+  headers: { "Content-Type": "application/json" },
+  body: JSON.stringify({ url }),
+});
+
+
 
       if (!res.ok) throw new Error("Server Error");
 
@@ -35,9 +37,10 @@ function App() {
       const docContent = `
         ${data.advice || "No advice returned."}
       `;
-
-      const blob = new Blob([docContent], { type: "application/vnd.openxmlformats-officedocument.wordprocessingml.document" });
+      const blob = await res.blob();
       setDocxBlob(blob);
+
+      
     } catch (err) {
       setError("Something went wrong. Try again.");
     }
