@@ -24,24 +24,15 @@ function App() {
 
     try {
       const res = await fetch(API_URL, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ url })
-      });
+  method: "POST",
+  headers: { "Content-Type": "application/json" },
+  body: JSON.stringify({ url }),
+});
 
-      const data = await res.json();
+if (!res.ok) throw new Error("Server Error");
 
-      if (!res.ok || !data.advice) {
-        throw new Error(data?.error || "No advice received.");
-      }
-
-      // Create docx-like text blob from advice
-      const blob = new Blob(
-        [data.advice],
-        {
-          type: "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
-        }
-      );
+const blob = await res.blob();
+setDocxBlob(blob);
 
       setDocxBlob(blob);
     } catch (err) {
