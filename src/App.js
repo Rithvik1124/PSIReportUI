@@ -46,7 +46,7 @@ setDocxBlob(blob);
   const downloadDoc = () => {
     const a = document.createElement("a");
     a.href = URL.createObjectURL(docxBlob);
-    a.download = "psi_advice.docx";
+    a.download = "psi_report_bundle.zip";
     a.click();
   };
 
